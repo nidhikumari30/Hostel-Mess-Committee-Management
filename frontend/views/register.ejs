@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Mess Management Portal</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Mess Management Portal</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/auth/login">Already have an account? Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Registration Form -->
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card shadow-lg">
+                    <div class="card-body p-4">
+                        <h2 class="text-center mb-4 fw-bold">Register as a Student</h2>
+                        <form id="registerForm">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Full Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                    <input type="text" name="name" class="form-control" id="name" placeholder="Enter your full name" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                    <input type="email" name="email" class="form-control" id="email" placeholder="Enter your email" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                    <input type="password" name="password" class="form-control" id="password" placeholder="Create a password (min. 6 characters)" required minlength="6">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone_no" class="form-label">Phone Number</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                                    <input type="text" name="phone_no" class="form-control" id="phone_no" placeholder="Enter your phone number" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="hostel_name" class="form-label">Hostel Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-house"></i></span>
+                                    <select name="hostel_name" class="form-control" id="hostel_name" required>
+                                        <option value="" disabled selected>Select your hostel</option>
+                                        <option value="gh1">GH1</option>
+                                        <option value="gh2">GH2</option>
+                                        <option value="gh3">GH3</option>
+                                        <option value="bh1">BH1</option>
+                                        <option value="bh2">BH2</option>
+                                        <option value="bh3">BH3</option>
+                                        <option value="bh4">BH4</option>
+                                        <option value="bh5">BH5</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="room_no" class="form-label">Room Number</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-door-closed"></i></span>
+                                    <input type="text" name="room_no" class="form-control" id="room_no" placeholder="Enter your room number" required>
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Register</button>
+                            </div>
+                        </form>
+                        <div class="text-center mt-3">
+                            <a href="/auth/login" class="text-decoration-none">Already have an account? Login</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- JavaScript for Alerts -->
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            // Gather form data
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                phone_no: document.getElementById('phone_no').value,
+                hostel_name: document.getElementById('hostel_name').value,
+                room_no: document.getElementById('room_no').value,
+            };
+
+            try {
+                // Send data to the server using fetch API
+                const response = await fetch('/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                // Show server messages as alert boxes
+                if (response.ok) {
+                    alert(result.message); // Display success message
+                    window.location.href = '/auth/verify-otp-register'; // Redirect to OTP verification page
+                } else {
+                    alert(result.message); // Display error message
+                }
+            } catch (error) {
+                // Handle fetch errors
+                alert('An error occurred while submitting your request. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>
